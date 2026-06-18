@@ -26,9 +26,9 @@ This project examines **4,705 Vancouver Airbnb listings** and **277,819 guest re
 
 ## 📊 Dashboard Preview
 
-> 🔗 [View Live Tableau Dashboard](#) *(paste your Tableau Public link here)*
+> 🔗 [View Live Tableau Dashboard](#) 
 
-![Dashboard Preview](dashboard/preview.png) *(replace with a screenshot of your Power BI / Tableau dashboard)*
+![Dashboard Preview](dashboard/preview.png) 
 
 ---
 
