@@ -180,5 +180,4 @@ jupyter
 **Gowri Sukumaran** — Aspiring Data Analyst with hands-on experience in Python, machine learning, NLP, and BI tools.
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](#)
-[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-brightgreen?style=flat-square)](#)
 [![Email](https://img.shields.io/badge/Email-Contact-red?style=flat-square&logo=gmail)](#)
