@@ -113,14 +113,8 @@ airbnb-vancouver-segmentation/
 │   ├── listings.csv                  # 4,705 listings × 49 features
 │   └── reviews.csv                   # 277,819 guest reviews
 │
-├── notebooks/
-│   ├── 01_eda.ipynb                  # Exploratory data analysis
-│   ├── 02_clustering.ipynb           # K-Means & PCA segmentation
-│   └── 03_sentiment_analysis.ipynb   # VADER sentiment analysis
+├── EDA_Airbnb_Vancouver.ipynb   # Full analysis: EDA, clustering & sentiment
 │
-├── dashboard/
-│   ├── airbnb_vancouver.pbix         # Power BI dashboard
-│   └── preview.png                   # Dashboard screenshot
 │
 └── README.md
 ```
@@ -132,7 +126,6 @@ airbnb-vancouver-segmentation/
 ```bash
 # Clone the repo
 git clone https://github.com/GowriSNair/airbnb-vancouver-segmentation.git
-cd airbnb-vancouver-segmentation
 
 # Install dependencies
 pip install -r requirements.txt
