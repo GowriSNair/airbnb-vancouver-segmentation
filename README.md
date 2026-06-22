@@ -21,15 +21,6 @@ This project examines **4,705 Vancouver Airbnb listings** and **277,819 guest re
 - **Sentiment:** ~80–90% positive reviews across all listings
 - **Top Satisfaction Drivers:** Cleanliness, comfort, location, and host communication
 - **Top Complaint Areas:** Noise, cleanliness issues, inaccurate listing photos
-
----
-
-## 📊 Dashboard Preview
-
-> 🔗 [View Live Tableau Dashboard](#) 
-
-![Dashboard Preview](dashboard/preview.png) 
-
 ---
 
 ## 🔍 Business Problem
@@ -172,5 +163,4 @@ jupyter
 
 **Gowri Sukumaran** — Aspiring Data Analyst with hands-on experience in Python, machine learning, NLP, and BI tools.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](#)
-[![Email](https://img.shields.io/badge/Email-Contact-red?style=flat-square&logo=gmail)](#)
+
