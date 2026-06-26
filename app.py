@@ -100,7 +100,7 @@ if selected_cluster != 'All':
     rv = rv[rv['cluster_name'] == selected_cluster]
 
 # ── HEADER ────────────────────────────────────────────────
-st.markdown("# 🏙️ Airbnb Vancouver — Market Intelligence Dashboard")
+st.markdown("# 🏙️ Airbnb Vancouver — Market Segmentation Dashboard")
 st.markdown("Interactive analysis of **pricing, market segments, and guest sentiment** across Vancouver's short-term rental market.")
 st.divider()
 
