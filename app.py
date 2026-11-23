@@ -32,10 +32,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 CLUSTER_COLORS = {
-    '🟣 Budget':    '#9b59b6',
-    '🔵 Mid-Range': '#3498db',
-    '🟢 Premium':   '#2ecc71',
-    '🟡 Long-Term': '#f1c40f',
+    '🟣 Multi-Listing Operators': '#9b59b6',
+    '🔵 Short-Stay Homes':        '#3498db',
+    '🟢 Private Rooms':           '#2ecc71',
+    '🟡 Monthly Rentals':         '#f1c40f',
 }
 SENTIMENT_COLORS = {
     'Positive': '#2ecc71',
@@ -78,14 +78,18 @@ with st.sidebar:
     st.markdown("### 📊 Dataset")
     st.markdown(f"**{len(listings):,}** listings")
     st.markdown(f"**{len(reviews):,}** reviews")
-    st.markdown("*Source: Inside Airbnb — Vancouver*")
+    st.markdown("*Source: Inside Airbnb — Vancouver, 17 Sep 2026 snapshot*")
 
 # ── FILTER DATA ───────────────────────────────────────────
 df = listings.copy()
 if selected_room != 'All':        df = df[df['room_type'] == selected_room]
 if selected_neighbourhood != 'All': df = df[df['neighbourhood'] == selected_neighbourhood]
 if selected_cluster != 'All':     df = df[df['cluster_name'] == selected_cluster]
-df = df[(df['price'] >= price_range[0]) & (df['price'] <= price_range[1])]
+in_range = (df['price'] >= price_range[0]) & (df['price'] <= price_range[1])
+if price_range == (0, price_max):
+    in_range |= df['price'] >= price_max   # full range: keep capped top prices
+    in_range |= df['price'].isna()         # and listings with no price in this snapshot
+df = df[in_range]
 
 rv = reviews.copy()
 if selected_cluster != 'All':
@@ -293,7 +297,7 @@ st.plotly_chart(fig7, use_container_width=True)
 
 # ── ROW 4: SENTIMENT ──────────────────────────────────────
 st.markdown("---")
-st.subheader("💬 Guest Sentiment Analysis — VADER NLP (80K reviews)")
+st.subheader(f"💬 Guest Sentiment Analysis — VADER NLP ({len(reviews):,} reviews)")
 
 col7, col8 = st.columns([1, 2])
 
@@ -339,7 +343,7 @@ with col8:
 # Sentiment over time
 st.subheader("📅 Sentiment Trend Over Time")
 rv_time = rv.dropna(subset=['year'])
-rv_time = rv_time[rv_time['year'].between(2015, 2024)]
+rv_time = rv_time[rv_time['year'].between(2015, 2026)]
 trend = (
     rv_time.groupby(['year','sentiment'])
     .size().reset_index(name='Count')
@@ -368,7 +372,7 @@ st.subheader("🗺️ Listing Map — Geographic Distribution")
 map_df = df.dropna(subset=['latitude','longitude','price']).copy()
 map_df = map_df[map_df['price'] > 0]
 
-fig_map = px.scatter_mapbox(
+fig_map = px.scatter_map(
     map_df.sample(min(3000, len(map_df)), random_state=42),
     lat='latitude', lon='longitude',
     color='cluster_name',
@@ -378,7 +382,7 @@ fig_map = px.scatter_mapbox(
     hover_data={'price':True,'room_type':True,'cluster_name':True,
                 'latitude':False,'longitude':False},
     color_discrete_map=CLUSTER_COLORS,
-    mapbox_style='carto-darkmatter',
+    map_style='carto-darkmatter',
     zoom=11,
     center={"lat": 49.2827, "lon": -123.1207},
     title='Vancouver Airbnb Listings by Market Segment',
@@ -397,8 +401,8 @@ st.plotly_chart(fig_map, use_container_width=True)
 st.markdown("---")
 st.markdown("""
 <div style='text-align:center; color:#666; font-size:0.85rem; padding: 12px 0'>
-    Built by <strong>Gowri Sukumaran</strong> · 
-    Data: Inside Airbnb (Vancouver) · 
+    Built by <strong>Gowri S Nair</strong> · 
+    Data: Inside Airbnb (Vancouver, Sep 2026) · 
     Tools: Python, Scikit-learn, VADER, Streamlit, Plotly
 </div>
 """, unsafe_allow_html=True)

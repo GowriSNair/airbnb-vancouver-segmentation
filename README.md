@@ -1,34 +1,34 @@
 # 🏠 Airbnb Vancouver — Market Segmentation & BI Dashboard
 
-![Python](https://img.shields.io/badge/Python-3.9-blue?style=flat-square&logo=python)
+![Python](https://img.shields.io/badge/Python-3.9+-blue?style=flat-square&logo=python)
 ![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?style=flat-square&logo=pandas)
 ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-K--Means%20%7C%20PCA-F7931E?style=flat-square&logo=scikit-learn)
 ![NLTK](https://img.shields.io/badge/NLTK-Sentiment%20Analysis-3776AB?style=flat-square&logo=python)
-![Tableau](https://img.shields.io/badge/Tableau-Dashboard-E97627?style=flat-square&logo=tableau)
-![Power BI](https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?style=flat-square&logo=powerbi)
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat-square&logo=streamlit)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=flat-square)
 
 ---
 
 ## 🎯 Project Overview
 
-This project examines **4,705 Vancouver Airbnb listings** and **277,819 guest reviews** to uncover pricing patterns, market segments, and customer sentiment. Using K-Means clustering, PCA, and VADER sentiment analysis, the project segments the market into four distinct listing types and identifies the key drivers of guest satisfaction.
+This project examines **6,131 Vancouver Airbnb listings** and **346,589 guest reviews** (Inside Airbnb snapshot of 17 September 2026) to uncover pricing patterns, market segments, and customer sentiment. Using K-Means clustering, PCA, and VADER sentiment analysis, it segments the market into four distinct listing types and identifies what separates positive reviews from complaints. Results are explored in an interactive Streamlit dashboard.
 
 **Key Highlights:**
 
-- **Dataset:** 4,705 listings × 49 features + 277,819 guest reviews × 6 columns
-- **Clusters Identified:** 4 distinct market segments (budget, mid-range, premium, long-term)
-- **Sentiment:** ~80–90% positive reviews across all listings
-- **Top Satisfaction Drivers:** Cleanliness, comfort, location, and host communication
-- **Top Complaint Areas:** Noise, cleanliness issues, inaccurate listing photos
+- **Dataset:** 6,131 listings × 90 features + 346,589 guest reviews
+- **Segments identified:** Short-Stay Homes, Monthly Rentals, Private Rooms, Multi-Listing Operators
+- **Long-stay shift:** 30% of listings now require a stay of 30 nights or more
+- **Sentiment:** 91% of reviews positive, 6% neutral, 3% negative — but the positive share has slipped from 96% (2021) to 88% (2026)
+- **Complaint signals:** dirtiness, smell and noise are mentioned far more often in negative reviews
+
 ---
 
 ## 🔍 Business Problem
 
-Vancouver's short-term rental market is highly competitive. Hosts and property managers lack visibility into:
+Vancouver's short-term rental market is highly competitive and tightly regulated. Hosts and property managers lack visibility into:
 - Which listing types command premium pricing
-- What guest experience factors drive 5-star reviews
-- How neighbourhood, room type, and pricing strategy affect performance across segments
+- What guest experience factors drive positive versus negative reviews
+- How room type, minimum stay and host scale separate the market into segments
 
 **This project answers all three.**
 
@@ -37,22 +37,20 @@ Vancouver's short-term rental market is highly competitive. Hosts and property m
 ## 🧠 Methodology
 
 ### 1. Exploratory Data Analysis
-- Analysed price distributions, room types, neighbourhood concentrations, and review score patterns
-- Removed extreme price outliers above $1,000/night for cleaner analysis
-- Found price has **weak correlation** with all numeric features — pricing is driven by qualitative factors
+- Analysed price distributions, room types, neighbourhood concentrations, review frequency and correlations
+- Converted price from text, capped prices at the 99th percentile ($1,539) and minimum stay at 30 nights
+- Found price only weakly related to most numeric features; its strongest link is with minimum stay (r = −0.37)
 
-### 2. Dimensionality Reduction (PCA)
-- Reduced 49 features to 2 principal components for visualisation
-- Confirmed clear cluster separation in the PCA plot — K-Means captured natural listing groupings
+### 2. Market Segmentation (K-Means Clustering)
+- Clustered on price, minimum nights, review volume and rate, availability, host listing count, room type and neighbourhood (standardised)
+- Elbow method → **K = 4**; clusters are named automatically from their profiles
 
-### 3. Market Segmentation (K-Means Clustering)
-- Applied elbow method to determine optimal K = **4 clusters**
-- Merged clustering results with listing features to profile each segment
+### 3. Dimensionality Reduction (PCA)
+- Projected the clustering features to 2 components (41% of variance) to visualise segment separation
 
 ### 4. Sentiment Analysis (VADER)
-- Processed **277,819 guest reviews** using VADER (Valence Aware Dictionary and sEntiment Reasoner)
-- Mapped compound sentiment scores back to each cluster to surface experience patterns
-- Built word clouds for positive and negative feedback themes
+- Cleaned and scored **346,553 reviews** with comment text using VADER (NLTK)
+- Mapped sentiment to each segment and over time; compared theme mentions in positive vs negative reviews; built word clouds
 
 ---
 
@@ -60,25 +58,29 @@ Vancouver's short-term rental market is highly competitive. Hosts and property m
 
 ### Market Segments
 
-| Cluster | Segment Name | Description | Sentiment |
-|---|---|---|---|
-| 0 | Budget Small Listings | Cheap, small, long minimum stay, lower ratings | Slightly more neutral/negative |
-| 1 | High-Performing Mid-Range | Flexible, affordable, many reviews, high occupancy | Strongest positive sentiment |
-| 2 | Premium Large Family Homes | Expensive, large homes, group stays, niche market | Strong positive, fewer reviews |
-| 3 | Long-Term Professional Host Units | 1-month minimum stay, run by multi-listing hosts | More neutral (fewer daily interactions) |
+| Segment | Listings | Median price | Profile | Positive reviews |
+|---|---|---|---|---|
+| 🔵 Short-Stay Homes | 3,595 | $353 | Entire homes, ~2-night minimum, most reviews | 91.1% |
+| 🟡 Monthly Rentals | 1,300 | $151 | Entire homes, 30-night minimum, fewer reviews | 92.6% |
+| 🟢 Private Rooms | 1,013 | $150 | Rooms in shared homes, ~12-night average minimum | 86.0% |
+| 🟣 Multi-Listing Operators | 223 | $87 | Hosts with ~125 listings each, near-monthly minimums, high availability | 90.0% |
 
-### Sentiment Breakdown
+### What Guests Talk About
 
-| Sentiment | Share |
-|---|---|
-| ✅ Positive | ~80–90% |
-| 😐 Neutral | ~5–8% |
-| ❌ Negative | <5% |
+| Theme | % of positive reviews | % of negative reviews |
+|---|---|---|
+| Location | 49.9% | 12.2% |
+| Cleanliness | 32.5% | 8.5% |
+| Host communication | 25.3% | 7.5% |
+| Comfort / bed | 22.0% | 6.8% |
+| Noise | 3.2% | 6.3% |
+| Dirty | 0.5% | 4.6% |
+| Smell | 0.5% | 2.5% |
 
-### Neighbourhood Insights
-- **Downtown** has the highest listing concentration
-- **Kitsilano & Mount Pleasant** show strong mid-range Airbnb activity
-- Some residential areas have low supply — indicating limited competition opportunity
+### Market & Neighbourhood Insights
+- **Entire homes** make up 82% of listings; median nightly price is **$273**
+- **Downtown** has the most listings (1,434) and the highest median price ($345), followed by Downtown Eastside ($331)
+- Listings with 30-night minimums charge less per night and collect fewer reviews
 
 ---
 
@@ -86,12 +88,12 @@ Vancouver's short-term rental market is highly competitive. Hosts and property m
 
 | Category | Tools |
 |---|---|
-| Language | Python 3.9 |
+| Language | Python |
 | Data Manipulation | Pandas, NumPy |
 | Machine Learning | Scikit-learn (K-Means, PCA) |
-| NLP / Sentiment | VADER (NLTK) |
-| Visualisation | Matplotlib, Seaborn, Power BI, Tableau |
-| Dataset | Inside Airbnb — Vancouver (public dataset) |
+| NLP / Sentiment | VADER (NLTK), WordCloud |
+| Visualisation | Matplotlib, Seaborn, Plotly, Streamlit |
+| Dataset | [Inside Airbnb](https://insideairbnb.com/get-the-data/) — Vancouver, 17 Sep 2026 (CC BY 4.0) |
 
 ---
 
@@ -99,10 +101,11 @@ Vancouver's short-term rental market is highly competitive. Hosts and property m
 
 ```
 airbnb-vancouver-segmentation/
-├── EDA_Airbnb_Vancouver.ipynb   # Full analysis: EDA, PCA, K-Means clustering & VADER sentiment
+├── EDA_Airbnb_Vancouver.ipynb   # Full analysis: EDA, PCA, K-Means, VADER sentiment; exports dashboard data
 ├── app.py                       # Streamlit dashboard
-├── listings_processed.csv       # Dashboard input: listings with cluster labels
-├── reviews_processed.csv        # Dashboard input: reviews with sentiment labels
+├── listings_processed.csv       # Dashboard input: listings with segment labels
+├── reviews_processed.csv        # Dashboard input: review dates, sentiment and segment
+├── .streamlit/config.toml       # Dark theme for the dashboard
 ├── requirements.txt
 └── README.md
 ```
@@ -117,28 +120,28 @@ cd airbnb-vancouver-segmentation
 pip install -r requirements.txt
 ```
 
-**Notebook:** download `listings.csv` and `reviews.csv` for Vancouver from [Inside Airbnb](https://insideairbnb.com/get-the-data/), place them in the project folder, then open `EDA_Airbnb_Vancouver.ipynb` in Jupyter.
+**Dashboard:** `streamlit run app.py` (uses the processed CSVs already in the repo)
 
-**Dashboard:** `streamlit run app.py`
+**Notebook:** from [Inside Airbnb](https://insideairbnb.com/get-the-data/), download the Vancouver **detailed** `listings.csv.gz` and `reviews.csv.gz`, place them in the project folder, and run `EDA_Airbnb_Vancouver.ipynb`. The last cell regenerates the dashboard CSVs. Newer snapshots will give slightly different numbers.
 
 ---
 
 ## 📈 Key Recommendations
 
-- **Hosts** should prioritise cleanliness, communication, and accurate listing photos — these are the top drivers of positive sentiment
-- **Mid-range and premium segments** show the highest satisfaction — ideal candidates for aggressive marketing
-- **Budget and long-term clusters** should optimise pricing and improve service quality to reduce neutral/negative feedback
-- **Low-supply neighbourhoods** represent opportunity for new hosts with limited competition
+- **Short-stay hosts** compete hardest on reviews: location, cleanliness and communication dominate positive feedback
+- **Private-room hosts** have the weakest sentiment (86% positive) and should prioritise cleanliness and noise control
+- **Monthly rentals** keep guests happiest (92.6% positive) at a lower nightly price — a viable alternative to short stays
+- **Falling positive share since 2021** is worth monitoring: complaints about dirtiness, smell and noise are the clearest signals to act on
 
 ---
 
 ## ✅ Skills Demonstrated
 
 - ✅ Unsupervised machine learning (K-Means clustering, PCA)
-- ✅ Natural language processing (VADER sentiment analysis, word clouds)
-- ✅ Large-scale data processing (277K+ records)
-- ✅ Exploratory data analysis & feature engineering
-- ✅ Business intelligence dashboard design (Power BI & Tableau)
+- ✅ Natural language processing (VADER sentiment analysis, theme analysis, word clouds)
+- ✅ Large-scale data processing (346K+ records)
+- ✅ Exploratory data analysis & data cleaning
+- ✅ Interactive BI dashboard (Streamlit, Plotly)
 - ✅ Translating analytical findings into business recommendations
 
 ---
