@@ -99,14 +99,11 @@ Vancouver's short-term rental market is highly competitive. Hosts and property m
 
 ```
 airbnb-vancouver-segmentation/
-│
-├── data/
-│   ├── listings.csv                  # 4,705 listings × 49 features
-│   └── reviews.csv                   # 277,819 guest reviews
-│
-├── EDA_Airbnb_Vancouver.ipynb   # Full analysis: EDA, clustering & sentiment
-│
-│
+├── EDA_Airbnb_Vancouver.ipynb   # Full analysis: EDA, PCA, K-Means clustering & VADER sentiment
+├── app.py                       # Streamlit dashboard
+├── listings_processed.csv       # Dashboard input: listings with cluster labels
+├── reviews_processed.csv        # Dashboard input: reviews with sentiment labels
+├── requirements.txt
 └── README.md
 ```
 
@@ -115,27 +112,14 @@ airbnb-vancouver-segmentation/
 ## ⚙️ How to Run
 
 ```bash
-# Clone the repo
 git clone https://github.com/GowriSNair/airbnb-vancouver-segmentation.git
-
-# Install dependencies
+cd airbnb-vancouver-segmentation
 pip install -r requirements.txt
-
-# Run notebooks in order
-jupyter notebook
 ```
 
-**Requirements:**
-```
-pandas
-numpy
-scikit-learn
-nltk
-matplotlib
-seaborn
-wordcloud
-jupyter
-```
+**Notebook:** download `listings.csv` and `reviews.csv` for Vancouver from [Inside Airbnb](https://insideairbnb.com/get-the-data/), place them in the project folder, then open `EDA_Airbnb_Vancouver.ipynb` in Jupyter.
+
+**Dashboard:** `streamlit run app.py`
 
 ---
 
@@ -159,8 +143,6 @@ jupyter
 
 ---
 
-## 👩‍💻 About Me
+## 👩‍💻 Author
 
-**Gowri Sukumaran** — Aspiring Data Analyst with hands-on experience in Python, machine learning, NLP, and BI tools.
-
-
+**Gowri S Nair** — Data Analyst · [LinkedIn](https://www.linkedin.com/in/gowri-s-nair-9ba795354) · [GitHub](https://github.com/GowriSNair)
